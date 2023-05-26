@@ -18,6 +18,22 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult LogIn() {
+        return View();
+    }
+
+    public IActionResult Teams() {
+        return View();
+    }
+
+    public IActionResult Players() {
+        return View();
+    }
+
+    public IActionResult Stadions() {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();
