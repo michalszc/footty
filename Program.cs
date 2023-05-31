@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Footty.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<FoottyContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("FoottyContext") ?? throw new InvalidOperationException("Connection string 'FoottyContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

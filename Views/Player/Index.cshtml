@@ -1,0 +1,65 @@
+@model IEnumerable<footty.Models.Player>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.team)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.position)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.shirt_number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.minutes_played)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.games_played)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.goals_scored)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.team)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.shirt_number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.minutes_played)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.games_played)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.goals_scored)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
