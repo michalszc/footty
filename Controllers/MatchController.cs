@@ -25,21 +25,72 @@ namespace footty.Controllers
         // GET: Match
         public async Task<IActionResult> Index()
         {
-            var list = await _context.Match.ToListAsync();
-            var from = HttpContext.Session.GetString("from");
-            IEnumerable<footty.Models.Match> chosen;
-            if(!HttpContext.Session.Keys.Contains("from")) {
-                chosen = list;
-            }else {
-                var firstDate = DateTime.Parse(from, new CultureInfo("pl-PL", true));
-                chosen = list.Where(p => DateTime.Parse(from, new CultureInfo(p.date, true)) >= firstDate);
-            }
-              return _context.Match != null ? 
-                          View(await _context.Match
+            var list = await _context.Match
                                 .Include(m => m.team)
                                 .Include(m => m.opponent)
-                                .ToListAsync()) :
+                                .ToListAsync();
+
+            var fromDate = DateTime.Parse("1970-01-01");
+            var toDate = DateTime.Today;
+            if(HttpContext.Session.Keys.Contains("from")) {
+                var from = HttpContext.Session.GetString("from"); 
+                fromDate = DateTime.Parse(from!);
+            } 
+            if(HttpContext.Session.Keys.Contains("to")) {
+                var to = HttpContext.Session.GetString("to");
+                fromDate = DateTime.Parse(to!);
+            } 
+            
+            var good = list.Where(p => 
+                                    p.place == "Home"
+                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
+                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) <= toDate);
+            
+            if (HttpContext.Session.Keys.Contains("team")) {
+                var team = HttpContext.Session.GetString("team");
+                if (team != "" && team != "Select team") {
+                    good = good.Where(p => p.team!.name == team || p.opponent!.name == team);
+                }
+            }
+            
+            return _context.Match != null ? 
+                          View(good) :
                           Problem("Entity set 'FoottyContext.Match'  is null.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(IFormCollection form) {
+            string from = form["from"].ToString();
+            string to = form["to"].ToString();
+            string team = form["team"].ToString();
+            
+            var list = await _context.Match
+                                .Include(m => m.team)
+                                .Include(m => m.opponent)
+                                .ToListAsync();
+
+            var fromDate = DateTime.Parse("1970-01-01");
+            var toDate = DateTime.Today;
+            if (from != "") {
+                fromDate = DateTime.Parse(from);
+            }
+            if (to != "") {
+                toDate = DateTime.Parse(to);
+            }
+            
+            HttpContext.Session.SetString("from", from);
+            HttpContext.Session.SetString("to", to);
+            HttpContext.Session.SetString("team", team);
+            var good = list.Where(p => 
+                                    p.place == "Home"
+                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
+                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) <= toDate);
+
+            if (team != "" && team != "Select team") {
+                good = good.Where(p => p.team!.name == team || p.opponent!.name == team);   
+            }
+
+            return View(good);
         }
 
         // GET: Match/Details/5
