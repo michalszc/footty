@@ -9,37 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = footty
 build_property.RootNamespace = footty
-build_property.ProjectDir = c:\Users\micha\Desktop\Studia\s4\Programowanie zaawansowane 2\laby\footty\
+build_property.ProjectDir = C:\Users\micha\Desktop\Studia\s4\Programowanie zaawansowane 2\laby\footty\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = c:\Users\micha\Desktop\Studia\s4\Programowanie zaawansowane 2\laby\footty
+build_property.MSBuildProjectDirectory = C:\Users\micha\Desktop\Studia\s4\Programowanie zaawansowane 2\laby\footty
 build_property._RazorSourceGeneratorDebug = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Home/Index.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Home/Privacy.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/Error.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/_ViewImports.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Stadium/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhZGl1bVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Stadium/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhZGl1bVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Stadium/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhZGl1bVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Stadium/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhZGl1bVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Stadium/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhZGl1bVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Team/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhbVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Team/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhbVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Team/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhbVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Team/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhbVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Team/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhbVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/_ViewStart.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/_Layout.cshtml]
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-htxhyi7mjd
