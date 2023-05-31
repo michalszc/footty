@@ -6,7 +6,7 @@ public class Stadium
 {
     [Key]
     public int id { get; set; }
-    public int team { get; set; }
+    public Team? team { get; set; }
     public String? city { get; set; }
     public String? name { get; set; }
     public int capacity { get; set; }

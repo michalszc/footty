@@ -23,7 +23,7 @@ namespace footty.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Player != null ? 
-                          View(await _context.Player.ToListAsync()) :
+                          View(await _context.Player.Include(p => p.team).ToListAsync()) :
                           Problem("Entity set 'FoottyContext.Player'  is null.");
         }
 
@@ -36,6 +36,7 @@ namespace footty.Controllers
             }
 
             var player = await _context.Player
+                .Include(p => p.team)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (player == null)
             {
