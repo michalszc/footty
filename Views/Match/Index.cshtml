@@ -9,86 +9,58 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="row">
-    <div class="col-sm-2">
-        <h4>Filtry</h4>
 
-        <form asp-action="Index">
-        <div class="form-group">
-            <label for="exampleInputEmail1">From</label>
-            <input name="from" id="from", class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="exampleInputEmail1">To</label>
-            <input name="to" id="to", class="form-control" />
-        </div>
-        <button type="submit" value="Index" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <div class="col-sm-10">
-        <table class="table">
-            @* <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.date)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.team)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.opponent)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.place)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.team_goals)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.opponent_goals)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody> *@
-        @foreach (var item in Model) {
-                <tr>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.date)
-                        <h4>
-                            @Html.DisplayFor(modelItem => item.team)
-                            @Html.DisplayFor(modelItem => item.team_goals) 
-                            -
-                            @Html.DisplayFor(modelItem => item.opponent_goals)
-                            @Html.DisplayFor(modelItem => item.opponent)
-                        </h4>
-                    </td>
-                    @* <td>
-                        @Html.DisplayFor(modelItem => item.date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.team)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.opponent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.place)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.team_goals)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.opponent_goals)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-                    </td> *@
-                </tr>
-        }
-            </tbody>
-        </table>
-    </div>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.team)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.opponent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.place)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.team_goals)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.opponent_goals)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.team!.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.opponent!.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.place)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.team_goals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.opponent_goals)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

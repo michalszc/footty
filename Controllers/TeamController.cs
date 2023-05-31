@@ -22,9 +22,6 @@ namespace footty.Controllers
         // GET: Team
         public async Task<IActionResult> Index()
         {
-            foreach(var a in _context.Team.ToList()) {
-                Console.WriteLine(a.ToString());
-            }
               return _context.Team != null ? 
                           View(await _context.Team.ToListAsync()) :
                           Problem("Entity set 'FoottyContext.Team'  is null.");
