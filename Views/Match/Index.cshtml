@@ -40,10 +40,10 @@
                 @Html.DisplayFor(modelItem => item.date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.team)
+                @Html.DisplayFor(modelItem => item.team!.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.opponent)
+                @Html.DisplayFor(modelItem => item.opponent!.name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.place)

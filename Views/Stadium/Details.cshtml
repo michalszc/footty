@@ -14,7 +14,7 @@
             @Html.DisplayNameFor(model => model.team)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.team)
+            @Html.DisplayFor(model => model.team!.name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.city)
@@ -48,7 +48,55 @@
         </dd>
     </dl>
 </div>
+<div id="map"></div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script defer>
+    /* OSM & OL example code provided by https://mediarealm.com.au/ */
+    let map;
+    const mapLat = 40;
+    const mapLng = -3;
+    const mapDefaultZoom = 6.5;
+    
+    function initialize_map() {
+      map = new ol.Map({
+        target: "map",
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM({
+                      url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                })
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([mapLng, mapLat]),
+            zoom: mapDefaultZoom
+        })
+      });
+    }
+
+    function add_map_point(lat, lng) {
+      const vectorLayer = new ol.layer.Vector({
+        source:new ol.source.Vector({
+          features: [new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
+            })]
+        }),
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 0.5],
+            anchorXUnits: "fraction",
+            anchorYUnits: "fraction",
+            src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
+          })
+        })
+      });
+
+      map.addLayer(vectorLayer); 
+    }
+
+initialize_map(); add_map_point(@Model!.latitude.ToString().Replace(",", "."), @Model!.longitude.ToString().Replace(",", "."));
+  </script>

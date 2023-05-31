@@ -23,7 +23,10 @@ namespace footty.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Match != null ? 
-                          View(await _context.Match.ToListAsync()) :
+                          View(await _context.Match
+                                .Include(m => m.team)
+                                .Include(m => m.opponent)
+                                .ToListAsync()) :
                           Problem("Entity set 'FoottyContext.Match'  is null.");
         }
 
@@ -36,6 +39,8 @@ namespace footty.Controllers
             }
 
             var match = await _context.Match
+                .Include(m => m.team)
+                .Include(m => m.opponent)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (match == null)
             {

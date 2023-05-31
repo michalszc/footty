@@ -20,13 +20,13 @@
             @Html.DisplayNameFor(model => model.team)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.team)
+            @Html.DisplayFor(model => model.team!.name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.opponent)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.opponent)
+            @Html.DisplayFor(model => model.opponent!.name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.place)

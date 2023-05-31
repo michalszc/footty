@@ -37,7 +37,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.team)
+                @Html.DisplayFor(modelItem => item.team!.name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.position)
