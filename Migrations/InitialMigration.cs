@@ -6,14 +6,14 @@ public partial class InitialMigration : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
+        string teams_sql = File.ReadAllText("./Data/teams.sql");
         string matches_sql = File.ReadAllText("./Data/matches.sql");
         string players_sql = File.ReadAllText("./Data/players.sql");
-        string teams_sql = File.ReadAllText("./Data/teams.sql");
         string stadiums_sql = File.ReadAllText("./Data/stadiums.sql");
         List<String> sqlQueries = new List<string>();
+        sqlQueries.AddRange(teams_sql.Split(";\r\n"));
         sqlQueries.AddRange(matches_sql.Split(";\r\n"));
         sqlQueries.AddRange(players_sql.Split(";\r\n"));
-        sqlQueries.AddRange(teams_sql.Split(";\r\n"));
         sqlQueries.AddRange(stadiums_sql.Split(";\r\n"));
         foreach (string sqlQuery in sqlQueries)
         {
