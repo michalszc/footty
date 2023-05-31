@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Footty.Data;
 using footty.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace footty.Controllers
 {
@@ -22,8 +25,36 @@ namespace footty.Controllers
         // GET: Match
         public async Task<IActionResult> Index()
         {
+            var list = await _context.Match.ToListAsync();
+            var from = HttpContext.Session.GetString("from");
+            IEnumerable<footty.Models.Match> chosen;
+            if(!HttpContext.Session.Keys.Contains("from")) {
+                chosen = list;
+            }else {
+                var firstDate = DateTime.Parse(from, new CultureInfo("pl-PL", true));
+                chosen = list.Where(p => DateTime.Parse(from, new CultureInfo(p.date, true)) >= firstDate);
+            }
               return _context.Match != null ? 
-                          View(await _context.Match.ToListAsync()) :
+                          View(chosen/*await _context.Match.ToListAsync()*/) :
+                          Problem("Entity set 'FoottyContext.Match'  is null.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(IFormCollection form)
+        {
+            string from = form["from"].ToString();
+            string to = form["to"].ToString();
+            if (from != "") {
+                HttpContext.Session.SetString("from", from);
+            }
+            if (to != "") {
+                HttpContext.Session.SetString("to", to);
+            }
+            var firstDate = DateTime.Parse(from, new CultureInfo("pl-PL", true));
+            var list = await _context.Match.ToListAsync();
+            var chosen = list.Where(p => DateTime.Parse(p.date, new CultureInfo("pl-PL", true)) >= firstDate);
+              return _context.Match != null ? 
+                          View(chosen/*await _context.Match.ToListAsync()*/) :
                           Problem("Entity set 'FoottyContext.Match'  is null.");
         }
 
