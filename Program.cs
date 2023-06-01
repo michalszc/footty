@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Footty.Data;
+
+
+List<string> forbiddenActions = new List<string>{"Create", "Delete", "Edit"};
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FoottyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("FoottyContext") ?? throw new InvalidOperationException("Connection string 'FoottyContext' not found.")));
@@ -8,11 +10,10 @@ builder.Services.AddDbContext<FoottyContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -35,6 +36,26 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+
+app.Use(async (ctx, next) =>
+{
+    bool isLogged = string.Equals(ctx.Session.GetString("isLogged"), "True");
+    bool canEdit = string.Equals(ctx.Session.GetString("canEdit"), "True");
+    string path = ctx.Request.Path.ToString();
+
+    if (!isLogged && path != "/User/Login" && path != "/User/Logout")
+    {
+        ctx.Response.Redirect("/User/Login");
+        return;
+    } else if (ctx.Response.StatusCode == 404 || (!canEdit && (forbiddenActions.Contains(path.Split("/").Last()) || path == "/User" || path == "/User/Index") )) {
+        ctx.Response.Redirect("/Home/Index");
+        return;
+    }
+
+    await next(ctx);
+});
+
 
 app.MapControllerRoute(
     name: "default",

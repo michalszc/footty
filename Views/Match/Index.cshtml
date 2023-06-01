@@ -1,7 +1,7 @@
 @model IEnumerable<footty.Models.Match>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Matches";
 }
 
 <h1>Matches</h1>
@@ -32,9 +32,11 @@
         </form> 
     </div>
     <div class="col-sm-8 offset-sm-3">
-        <p>
-            <a asp-action="Create">Create New</a>
-        </p>
+        @if (Context.Session.GetString("canEdit") == "True") {
+          <p>
+              <a asp-action="Create">Create New</a>
+          </p>
+        }
 
         <table class="table">
             <tbody>
@@ -63,9 +65,15 @@
                     </h4>
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                         @if (Context.Session.GetString("canEdit") == "True") {
+                              <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
+                              <span>|</span>
+                          }
+                          <a asp-action="Details" asp-route-id="@item.id">Details</a> 
+                          @if (Context.Session.GetString("canEdit") == "True") {
+                              <span>|</span>
+                              <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                          }
                     </td>
                 </tr>
         }
@@ -73,3 +81,4 @@
         </table>
     </div>
 </div>
+
