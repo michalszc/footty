@@ -6,68 +6,79 @@
 
 <h1>Matches</h1>
 
-@if (Context.Session.GetString("canEdit") == "True") {
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.team)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.opponent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.place)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.team_goals)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.opponent_goals)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.team!.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.opponent!.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.place)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.team_goals)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.opponent_goals)
-            </td>
-            <td>
-                @if (Context.Session.GetString("canEdit") == "True") {
-                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
-                    <span>|</span>
-                }
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> 
-                @if (Context.Session.GetString("canEdit") == "True") {
-                    <span>|</span>
-                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-                }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-2" style="position:fixed">
+        <h4>Filters</h4>
+        <form asp-action="Index">
+            <div class="mb-3 mt-3">
+                <label for="email" class="form-label">From:</label>
+                <input name = "from" type="date" class="form-control" id="from" placeholder="From" value='@ViewData["from"]'>
+            </div>
+            <div class="mb-3">
+                <label for="pwd" class="form-label">To:</label>
+                <input name = "to" type="date" class="form-control" id="to" placeholder="To" value='@ViewData["to"]'>
+            </div>
+            <div class="mb-3">
+                <select class="form-select" aria-label="Club" name="team">
+                    <option selected>@ViewData["team"]</option>
+                    <option value=""></option>
+                    @foreach (var item in Model.Select(p => p!.opponent!.name).Distinct())
+                    {
+                        <option value=@item>@item</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" value="Index">Filter</button>
+        </form> 
+    </div>
+    <div class="col-sm-8 offset-sm-3">
+        @if (Context.Session.GetString("canEdit") == "True") {
+          <p>
+              <a asp-action="Create">Create New</a>
+          </p>
+        }
+
+        <table class="table">
+            <tbody>
+        @foreach (var item in Model) {
+                <tr class="text-center">
+                    <td>
+                    <h4>@Html.DisplayFor(modelItem => item.date)</h4>
+                    <h4>
+                        @if (item.place == "Home")
+                        {
+                            @:&#127968
+                        } else {
+                            @:✈️
+                        }
+                        @Html.DisplayFor(modelItem => item.team!.name)
+                        @Html.DisplayFor(modelItem => item.team_goals)
+                        -
+                        @Html.DisplayFor(modelItem => item.opponent_goals)
+                        @Html.DisplayFor(modelItem => item.opponent!.name)
+                        @if (item.place == "Home")
+                        {
+                            @:✈️
+                        } else {
+                            @:&#127968
+                        }
+                    </h4>
+                    </td>
+                    <td>
+                         @if (Context.Session.GetString("canEdit") == "True") {
+                              <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
+                              <span>|</span>
+                          }
+                          <a asp-action="Details" asp-route-id="@item.id">Details</a> 
+                          @if (Context.Session.GetString("canEdit") == "True") {
+                              <span>|</span>
+                              <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                          }
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+

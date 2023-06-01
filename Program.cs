@@ -10,6 +10,7 @@ builder.Services.AddDbContext<FoottyContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -36,6 +37,7 @@ app.UseAuthorization();
 
 app.UseSession();
 
+
 app.Use(async (ctx, next) =>
 {
     bool isLogged = string.Equals(ctx.Session.GetString("isLogged"), "True");
@@ -53,6 +55,7 @@ app.Use(async (ctx, next) =>
 
     await next(ctx);
 });
+
 
 app.MapControllerRoute(
     name: "default",

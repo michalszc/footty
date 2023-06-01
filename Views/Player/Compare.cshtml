@@ -1,0 +1,218 @@
+@model IEnumerable<footty.Models.Player>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Compare players</h1>
+
+@if ((string)ViewData["compare"]! == "yes")
+{
+    <h3>Porównuje</h3>
+    <table class="table text-center">
+        <tbody>
+            <tr>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.team!.name).First()</h4>
+                </td>
+                <td>
+                    <h3>Team</h3>
+                </td>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.team!.name).First()</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.position).First()</h4>
+                </td>
+                <td>
+                    <h3>Position</h3>
+                </td>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.position).First()</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.shirt_number).First()</h4>
+                </td>
+                <td>
+                    <h3>Shirt number</h3>
+                </td>
+                <td>
+                    <h4>@Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.shirt_number).First()</h4>
+                </td>
+            </tr>
+            <tr>
+                @{
+                    var first =  Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.minutes_played).First();
+                    var second =  Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.minutes_played).First();
+                @:<td>
+                    if (first > second) {
+                        @:<h4 class="text-success">@first</h4>
+                    } else if (first < second) {
+                        <h4 class="text-danger">@first</h4>
+                    } else {
+                        <h4>@first</h4>
+                    }
+                @:</td>
+                @:<td>
+                  @:  <h3>Minutes played</h3>
+                @:</td>
+                @:<td>
+                    if (first < second) {
+                        @:<h4 class="text-success">@second</h4>
+                    } else if (first > second) {
+                        <h4 class="text-danger">@second</h4>
+                    } else {
+                        <h4>@second</h4>
+                    }
+                @:</td>
+                }
+            </tr>
+             @{
+                    first =  Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.games_played).First();
+                    second =  Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.games_played).First();
+                @:<td>
+                    if (first > second) {
+                        @:<h4 class="text-success">@first</h4>
+                    } else if (first < second) {
+                        <h4 class="text-danger">@first</h4>
+                    } else {
+                        <h4>@first</h4>
+                    }
+                @:</td>
+                @:<td>
+                  @:  <h3>Games played</h3>
+                @:</td>
+                @:<td>
+                    if (first < second) {
+                        @:<h4 class="text-success">@second</h4>
+                    } else if (first > second) {
+                        <h4 class="text-danger">@second</h4>
+                    } else {
+                        <h4>@second</h4>
+                    }
+                @:</td>
+                }
+            <tr>
+                @{
+                    first =  Model.Where(p => p.id == (int)ViewData["first"]!).Select(p => p.goals_scored).First();
+                    second =  Model.Where(p => p.id == (int)ViewData["second"]!).Select(p => p.goals_scored).First();
+                @:<td>
+                    if (first > second) {
+                        @:<h4 class="text-success">@first</h4>
+                    } else if (first < second) {
+                        <h4 class="text-danger">@first</h4>
+                    } else {
+                        <h4>@first</h4>
+                    }
+                @:</td>
+                @:<td>
+                  @:  <h3>Goals scored</h3>
+                @:</td>
+                @:<td>
+                    if (first < second) {
+                        @:<h4 class="text-success">@second</h4>
+                    } else if (first > second) {
+                        <h4 class="text-danger">@second</h4>
+                    } else {
+                        <h4>@second</h4>
+                    }
+                @:</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+} else {
+<p>Choose player to compare</p>
+
+<div class="row">
+     <div class="col-sm-2" style="position:fixed">
+        <h4>Filters</h4>
+        <form asp-action="Index">
+            <div class="mb-3">
+                <label for="pwd" class="form-label">Order by:</label>
+                <select class="form-select" aria-label="Club" name="order">
+                    <option value='@ViewData["order"]' selected>@ViewData["orderText"]</option>
+                    <option value="default">Default</option>
+                    <option value="goals_desc">By goals desc</option>
+                    <option value="goals_asc">By goals asc</option>
+                    <option value="games_desc">By games played desc</option>
+                    <option value="games_asc">By games played desc</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="pwd" class="form-label">Team:</label>
+                <select class="form-select" aria-label="Club" name="team">
+                    <option selected>@ViewData["team"]</option>
+                    <option value=""></option>
+                    @foreach (var item in (String[])ViewData["teams"]!)
+                    {
+                        <option value=@item>@item</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" value="Index">Filter</button>
+        </form> 
+    </div>
+    <div class="col-sm-8 offset-sm-3">
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.team)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.position)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.shirt_number)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.minutes_played)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.games_played)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.goals_scored)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.team!.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.shirt_number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.minutes_played)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.games_played)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.goals_scored)
+                    </td>
+                    <td>
+                        <a asp-action="Compare" asp-route-id="@item.id">Compare</a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    </div>
+</div>
+}

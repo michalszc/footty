@@ -22,8 +22,75 @@ namespace footty.Controllers
         // GET: Stadium
         public async Task<IActionResult> Index()
         {
-              return _context.Stadium != null ? 
-                          View(await _context.Stadium.Include(s => s.team).ToListAsync()) :
+            var stadiums = await _context.Stadium.Include(s => s.team).ToListAsync();
+
+            string[] cities = stadiums.Select(p => p.city).Distinct().ToArray()!;
+            ViewData["cities"] = cities;
+
+            if (HttpContext.Session.Keys.Contains("min")) {
+                stadiums = stadiums.Where(p => p.capacity >= HttpContext.Session.GetInt32("min")).ToList();
+                ViewData["min"] = HttpContext.Session.GetInt32("min");
+            }
+            if (HttpContext.Session.Keys.Contains("max")) {
+                stadiums = stadiums.Where(p => p.capacity <= HttpContext.Session.GetInt32("max")).ToList();
+                ViewData["max"] = HttpContext.Session.GetInt32("max");
+            }
+            if (HttpContext.Session.Keys.Contains("city")) {
+                stadiums = stadiums.Where(p => p.city == HttpContext.Session.GetString("city")).ToList();
+                ViewData["city"] = HttpContext.Session.GetString("city");
+            } else {
+                ViewData["city"] = "";
+            }
+
+            return _context.Stadium != null ? 
+                          View(stadiums) :
+                          Problem("Entity set 'FoottyContext.Stadium'  is null.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(IFormCollection form) {
+            var stadiums = await _context.Stadium.Include(s => s.team).ToListAsync();
+
+            string[] cities = stadiums.Select(p => p.city).Distinct().ToArray()!;
+            ViewData["cities"] = cities;
+
+            var minStr = form["min"].ToString();
+            var maxStr = form["max"].ToString();
+            var city = form["city"].ToString();
+
+            ViewData["min"] = minStr;
+            ViewData["max"] = maxStr;
+            ViewData["city"] = city;
+
+            if (minStr != "") {
+                int min = Int32.Parse(minStr);
+                stadiums = stadiums.Where(p => p.capacity >= min).ToList();
+                HttpContext.Session.SetInt32("min", min);
+            } else {
+                if (HttpContext.Session.Keys.Contains("min")) {
+                    HttpContext.Session.Remove("min");
+                }
+            }
+            if (maxStr != "") {
+                int max = Int32.Parse(maxStr);
+                stadiums = stadiums.Where(p => p.capacity <= max).ToList();
+                HttpContext.Session.SetInt32("max", max);
+            } else {
+                 if (HttpContext.Session.Keys.Contains("max")) {
+                    HttpContext.Session.Remove("max");
+                }
+            }
+            if (city != "") {
+                stadiums = stadiums.Where(p => p.city == city).ToList();
+                HttpContext.Session.SetString("city", city);
+            } else {
+                 if (HttpContext.Session.Keys.Contains("city")) {
+                    HttpContext.Session.Remove("city");
+                }
+            }
+
+            return _context.Stadium != null ? 
+                          View(stadiums) :
                           Problem("Entity set 'FoottyContext.Stadium'  is null.");
         }
 
