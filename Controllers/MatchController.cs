@@ -35,11 +35,14 @@ namespace footty.Controllers
             if(HttpContext.Session.Keys.Contains("from")) {
                 var from = HttpContext.Session.GetString("from"); 
                 fromDate = DateTime.Parse(from!);
+                ViewData["from"] = from;
             } 
             if(HttpContext.Session.Keys.Contains("to")) {
                 var to = HttpContext.Session.GetString("to");
                 fromDate = DateTime.Parse(to!);
+                ViewData["to"] = to;
             } 
+            
             
             var good = list.Where(p => 
                                     p.place == "Home"
@@ -51,6 +54,9 @@ namespace footty.Controllers
                 if (team != "" && team != "Select team") {
                     good = good.Where(p => p.team!.name == team || p.opponent!.name == team);
                 }
+                ViewData["team"] = team;
+            } else {
+                ViewData["team"] = "Select team";
             }
             
             return _context.Match != null ? 
@@ -68,6 +74,10 @@ namespace footty.Controllers
                                 .Include(m => m.team)
                                 .Include(m => m.opponent)
                                 .ToListAsync();
+
+            ViewData["from"] = from;
+            ViewData["to"] = to;
+            ViewData["team"] = team;
 
             var fromDate = DateTime.Parse("1970-01-01");
             var toDate = DateTime.Today;

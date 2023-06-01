@@ -12,15 +12,16 @@
         <form asp-action="Index">
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">From:</label>
-                <input name = "from" type="date" class="form-control" id="from" placeholder="From">
+                <input name = "from" type="date" class="form-control" id="from" placeholder="From" value='@ViewData["from"]'>
             </div>
             <div class="mb-3">
                 <label for="pwd" class="form-label">To:</label>
-                <input name = "to" type="date" class="form-control" id="to" placeholder="To">
+                <input name = "to" type="date" class="form-control" id="to" placeholder="To" value='@ViewData["to"]'>
             </div>
             <div class="mb-3">
                 <select class="form-select" aria-label="Club" name="team">
-                    <option selected>Select team</option>
+                    <option selected>@ViewData["team"]</option>
+                    <option value=""></option>
                     @foreach (var item in Model.Select(p => p!.opponent!.name).Distinct())
                     {
                         <option value=@item>@item</option>

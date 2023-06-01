@@ -22,8 +22,24 @@ namespace footty.Controllers
         // GET: Team
         public async Task<IActionResult> Index()
         {
-              return _context.Team != null ? 
-                          View(await _context.Team.ToListAsync()) :
+            var teams = await _context.Match
+                                .Include(m => m.team)
+                                .Include(m => m.opponent)
+                                .ToListAsync();
+
+            var table = teams
+                            .GroupBy(p => p.team!.name)
+                            .Select(
+                                group => new footty.Models.Table{
+                                    id = group.Min(p => p.team!.id),
+                                    Team = group.Key,
+                                    Goals = group.Sum(p => p.team_goals),
+                                    Conceeded = group.Sum(p => p.opponent_goals)
+                                }
+                            );
+
+            return _context.Team != null ? 
+                          View(table) :
                           Problem("Entity set 'FoottyContext.Team'  is null.");
         }
 
