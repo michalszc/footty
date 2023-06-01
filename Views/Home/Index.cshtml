@@ -5,13 +5,11 @@
 }
 
 <div class="text-center">
+    <h1>Favourite club</h1>
+    <h3>@ViewData["fav_team"]</h3>
+    <h5>Be where your club is! &#9917</h5>
     <div class="row">
-        <div class="col-sm-4">
-            <h1>Favourite club</h1>
-            <h3>@ViewData["fav_team"]</h3>
-            <h5>Be where your club is! &#9917</h5>
-        </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <h3>Last 5 games</h3>
             <table class="table">
             <tbody>
@@ -44,7 +42,43 @@
             </tbody>
         </table>
         </div>
+        <div class="col-sm-6">
+            <h3>Top 8 goal scorers</h3>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <h3>Number</h3>
+                    </th>
+                    <th>
+                        <h3>Matches played</h3>
+                    </th>
+                    <th>
+                        <h3>Goals scored</h3>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in (List<footty.Models.Player>)ViewData["scorers"]!)
+            {
+                <tr>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.shirt_number)</h5>
+                    </td>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.games_played)</h5>
+                    </td>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.goals_scored)</h5>
+                    </td>
+                </tr>
+            }
+            </tbody>
+            </table>
+        </div>
         <div id="map"></div>
+          @ViewData["lat"]
+@ViewData["long"]
     </div>
 </div>
 
@@ -92,6 +126,6 @@
       map.addLayer(vectorLayer); 
     }
 
-initialize_map(); add_map_point("43.264282", "-2.950366");
-@* @((string)ViewData["lat"]!).Replace(",", "."), @((string)ViewData["long"]!).Replace(",", ".") *@
+initialize_map(); add_map_point(@ViewData["lat"], @ViewData["long"]);
   </script>
+

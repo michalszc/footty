@@ -33,18 +33,26 @@ public class HomeController : Controller
                                 .Include(m => m.team)
                                 .Include(m => m.opponent)
                                 .ToListAsync();
-
+        
         list = list.Where(p => (p.team!.name == team || p.opponent!.name == team) && p.place=="Home")
                     .OrderByDescending(p => p.date)
                     .Take(5).ToList();
+
+
+        var players = await _context.Player.Include(p => p.team).ToListAsync();
+
+        players = players.Where(p => p.team!.name == team).OrderByDescending(p => p.goals_scored).Take(8).ToList();
 
         var stadiums = await _context.Stadium.Include(s => s.team).ToListAsync();
         string longitude = stadiums.Where(p => p.team!.name == team).Select(p => p.longitude).First().ToString();
         string latitude = stadiums.Where(p => p.team!.name == team).Select(p => p.latitude).First().ToString();
 
+
+
         ViewData["fav_team"] = team;
-        ViewData["long"] = longitude;
-        ViewData["lat"] = latitude;
+        ViewData["long"] = longitude.Replace(",", ".");
+        ViewData["lat"] = latitude.Replace(",", ".");
+        ViewData["scorers"] = players;
         return View(list);
     }
 
