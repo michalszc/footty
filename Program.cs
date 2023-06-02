@@ -78,6 +78,67 @@ app.MapGet("/api/matches/{id}/{nick}/{token}", async (int id, string nick, strin
     
 });
 
+app.MapPut("/api/matches/{id}/{team_goals}/{opponent_goals}/{nick}/{token}",
+            async (int id, int team_goals, int opponent_goals,
+                     string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    var match = await db.Match.FindAsync(id);
+
+    if (match is null) {
+        Console.WriteLine("Match");
+        return Results.NotFound();
+    }
+
+    match.team_goals = team_goals;
+    match.opponent_goals = opponent_goals;
+
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+    
+});
+
+app.MapPost("/api/matches/{date}/{team}/{opp}/{place}/{tg}/{og}/{nick}/{token}",
+            async (string date, int team, int opp, string place, int tg, int og,
+                     string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+
+    var firstTeam = db.Team.Where(t => t.id == team).First();
+    var secondTeam = db.Team.Where(t => t.id == opp).First();
+
+    if (firstTeam is null || secondTeam is null) {
+        return Results.NotFound();
+    }
+
+    footty.Models.Match match = new footty.Models.Match {
+        date = date.Replace('_','/'),
+        team = firstTeam,
+        opponent = secondTeam,
+        place = place,
+        team_goals = tg,
+        opponent_goals = og
+    };
+
+    db.Match.Add(match);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/api/matches/{match.id}/{nick}/{token}", match);
+
+});
+
+
 app.MapGet("/api/teams/{id}/{nick}/{token}", async (int id, string nick, string? token, FoottyContext db) =>
 {
     bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
@@ -102,7 +163,7 @@ app.MapGet("/api/players/{club}/{shirt}/{nick}/{token}", async (int club, string
     }
     return Results.Ok(await db.Player
                         .Include(p => p.team)
-                        .Where(p => p.team.id == club && p.shirt_number == shirt)
+                        .Where(p => p.team!.id == club && p.shirt_number == shirt)
                         .ToListAsync());
     
 });
