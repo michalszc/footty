@@ -92,6 +92,37 @@ app.MapGet("/api/teams/{id}/{nick}/{token}", async (int id, string nick, string?
     
 });
 
+app.MapGet("/api/players/{club}/{shirt}/{nick}/{token}", async (int club, string shirt, string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    return Results.Ok(await db.Player
+                        .Include(p => p.team)
+                        .Where(p => p.team.id == club && p.shirt_number == shirt)
+                        .ToListAsync());
+    
+});
+
+app.MapGet("/api/stadions/{city}/{nick}/{token}", async (String? city, string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    Console.WriteLine(city);
+    return Results.Ok(await db.Stadium
+                                .Include(s => s.team)
+                                .Where(s => s.city == city+" ")
+                                .ToListAsync());
+    
+});
+
 
 app.MapPost("/api/teams/{name}/{nick}/{token}", async (string name, string nick, string? token, FoottyContext db) => 
 {
