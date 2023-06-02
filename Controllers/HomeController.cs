@@ -30,7 +30,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-         var team = HttpContext.Session.GetString("favTeam");
+        var team = HttpContext.Session.GetString("favTeam");
         var list = await _context.Match
                                 .Include(m => m.team)
                                 .Include(m => m.opponent)
@@ -46,21 +46,18 @@ public class HomeController : Controller
         players = players.Where(p => p.team!.name == team).OrderByDescending(p => p.goals_scored).Take(8).ToList();
 
         var stadiums = await _context.Stadium.Include(s => s.team).ToListAsync();
-        string longitude = stadiums.Where(p => p.team!.name == team).Select(p => p.longitude).First().ToString();
-        string latitude = stadiums.Where(p => p.team!.name == team).Select(p => p.latitude).First().ToString();
-
-
+        string latitude = "0";
+        string longitude = "0";
+        if (stadiums.Where(p => p.team!.name == team).Count() > 0) {
+            longitude = stadiums.Where(p => p.team!.name == team).Select(p => p.longitude).First().ToString();
+            latitude = stadiums.Where(p => p.team!.name == team).Select(p => p.latitude).First().ToString();
+        }
 
         ViewData["fav_team"] = team;
         ViewData["long"] = longitude.Replace(",", ".");
         ViewData["lat"] = latitude.Replace(",", ".");
         ViewData["scorers"] = players;
         return View(list);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

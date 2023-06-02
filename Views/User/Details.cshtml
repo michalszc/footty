@@ -34,6 +34,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.token)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.favTeam)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.favTeam!.name)
+        </dd>
     </dl>
 </div>
 <div>
