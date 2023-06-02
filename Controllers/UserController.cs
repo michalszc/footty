@@ -28,6 +28,7 @@ namespace footty.Controllers
             {
                 HttpContext.Session.SetString("isLogged", "True");
                 HttpContext.Session.SetString("canEdit", user!.can_edit.ToString());
+                HttpContext.Session.SetString("favTeam", "FC Barcelona");
                 return LocalRedirect("/Home");
             } else {
                 ViewBag.ErrorMessage = "Incorrect username or password.";

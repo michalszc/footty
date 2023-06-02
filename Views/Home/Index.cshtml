@@ -1,20 +1,131 @@
-﻿@{
+﻿@model IEnumerable<footty.Models.Match>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1>Fotty</h1>
+    <h1>Favourite club</h1>
+    <h3>@ViewData["fav_team"]</h3>
     <h5>Be where your club is! &#9917</h5>
     <div class="row">
-        <div class="col-sm-4">
-            <h3>Favourite club</h3>
-            <p>@ViewData["team"]</p>
-        </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <h3>Last 5 games</h3>
+            <table class="table">
+            <tbody>
+        @foreach (var item in Model) {
+                <tr class="text-center">
+                    <td>
+                    <h4>@Html.DisplayFor(modelItem => item.date)</h4>
+                    <h4>
+                        @if (item.place == "Home")
+                        {
+                            @:&#127968
+                        } else {
+                            @:✈️
+                        }
+                        @Html.DisplayFor(modelItem => item.team!.name)
+                        @Html.DisplayFor(modelItem => item.team_goals)
+                        -
+                        @Html.DisplayFor(modelItem => item.opponent_goals)
+                        @Html.DisplayFor(modelItem => item.opponent!.name)
+                        @if (item.place == "Home")
+                        {
+                            @:✈️
+                        } else {
+                            @:&#127968
+                        }
+                    </h4>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
         </div>
-        <div class="col-sm-4">
-            <h3>Top 5 goalscorers</h3>
+        <div class="col-sm-6">
+            <h3>Top 8 goal scorers</h3>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <h3>Number</h3>
+                    </th>
+                    <th>
+                        <h3>Matches played</h3>
+                    </th>
+                    <th>
+                        <h3>Goals scored</h3>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in (List<footty.Models.Player>)ViewData["scorers"]!)
+            {
+                <tr>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.shirt_number)</h5>
+                    </td>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.games_played)</h5>
+                    </td>
+                    <td>
+                        <h5>@Html.DisplayFor(modelItem => item.goals_scored)</h5>
+                    </td>
+                </tr>
+            }
+            </tbody>
+            </table>
         </div>
+        <div id="map"></div>
+          @ViewData["lat"]
+@ViewData["long"]
     </div>
 </div>
+
+<script defer>
+    /* OSM & OL example code provided by https://mediarealm.com.au/ */
+    let map;
+    const mapLat = 40;
+    const mapLng = -3;
+    const mapDefaultZoom = 6.5;
+    
+    function initialize_map() {
+      map = new ol.Map({
+        target: "map",
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM({
+                      url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                })
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([mapLng, mapLat]),
+            zoom: mapDefaultZoom
+        })
+      });
+    }
+
+    function add_map_point(lat, lng) {
+      const vectorLayer = new ol.layer.Vector({
+        source:new ol.source.Vector({
+          features: [new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
+            })]
+        }),
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 0.5],
+            anchorXUnits: "fraction",
+            anchorYUnits: "fraction",
+            src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
+          })
+        })
+      });
+
+      map.addLayer(vectorLayer); 
+    }
+
+initialize_map(); add_map_point(@ViewData["lat"], @ViewData["long"]);
+  </script>
+
