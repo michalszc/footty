@@ -27,7 +27,8 @@ namespace Footty.Data
                     username = "admin",
                     password = CalculateMD5Hash("1234"),
                     can_edit = true,
-                    token = GenerateToken()
+                    token = GenerateToken(),
+                    favTeam = null
                 }
             );
             base.OnModelCreating(modelBuilder);

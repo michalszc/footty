@@ -20,10 +20,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -42,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Match/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWF0Y2hcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Compare.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXENvbXBhcmUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/micha/Desktop/Studia/s4/Programowanie zaawansowane 2/laby/footty/Views/Player/Create.cshtml]

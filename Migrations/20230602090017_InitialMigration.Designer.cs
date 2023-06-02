@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace footty.Migrations
 {
     [DbContext(typeof(FoottyContext))]
-    [Migration("20230531210317_InitialMigration")]
+    [Migration("20230602090017_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -141,6 +141,9 @@ namespace footty.Migrations
                     b.Property<bool>("can_edit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("favTeamid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("password")
                         .HasColumnType("TEXT");
 
@@ -152,6 +155,8 @@ namespace footty.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("favTeamid");
+
                     b.ToTable("User");
 
                     b.HasData(
@@ -160,8 +165,9 @@ namespace footty.Migrations
                             id = 1,
                             can_edit = true,
                             password = "81dc9bdb52d04dc20036dbd8313ed055",
-                            token = "6Y4ne9npAJFyssinCYVY2GfC",
-                            username = "admin"
+                            token = "Nx1t1ciiTEzVujYDS2yv1tJo",
+                            username = "admin",
+                            favTeamid = 1
                         });
                 });
 
@@ -196,6 +202,15 @@ namespace footty.Migrations
                         .HasForeignKey("teamid");
 
                     b.Navigation("team");
+                });
+
+            modelBuilder.Entity("footty.Models.User", b =>
+                {
+                    b.HasOne("footty.Models.Team", "favTeam")
+                        .WithMany()
+                        .HasForeignKey("favTeamid");
+
+                    b.Navigation("favTeam");
                 });
 #pragma warning restore 612, 618
         }

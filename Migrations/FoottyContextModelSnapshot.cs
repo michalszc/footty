@@ -138,6 +138,9 @@ namespace footty.Migrations
                     b.Property<bool>("can_edit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("favTeamid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("password")
                         .HasColumnType("TEXT");
 
@@ -149,6 +152,8 @@ namespace footty.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("favTeamid");
+
                     b.ToTable("User");
 
                     b.HasData(
@@ -157,7 +162,7 @@ namespace footty.Migrations
                             id = 1,
                             can_edit = true,
                             password = "81dc9bdb52d04dc20036dbd8313ed055",
-                            token = "PcNfOEpUvL3dXipQXEx6sRz7",
+                            token = "Nx1t1ciiTEzVujYDS2yv1tJo",
                             username = "admin"
                         });
                 });
@@ -193,6 +198,15 @@ namespace footty.Migrations
                         .HasForeignKey("teamid");
 
                     b.Navigation("team");
+                });
+
+            modelBuilder.Entity("footty.Models.User", b =>
+                {
+                    b.HasOne("footty.Models.Team", "favTeam")
+                        .WithMany()
+                        .HasForeignKey("favTeamid");
+
+                    b.Navigation("favTeam");
                 });
 #pragma warning restore 612, 618
         }
