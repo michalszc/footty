@@ -349,7 +349,90 @@ app.MapGet("/api/stadions/{city}/{nick}/{token}", async (String? city, string ni
     
 });
 
+app.MapPut("/api/stadions/{id}/{team}/{city}/{name}/{capacity}/{latitude}/{longitude}/{nick}/{token}",
+            async (int id, int team, string? city, string? name, int capacity, float latitude, 
+            float longitude, string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    var stadion = await db.Stadium.FindAsync(id);
+
+    if (stadion is null) {
+        return Results.NotFound();
+    }
+
+    var club = await db.Team.FindAsync(team);
+    if  (club is null) {
+        return Results.Unauthorized();
+    }
+
+    stadion.team = club;
+    stadion.city = city+" ";
+    stadion.name = name;
+    stadion.capacity = capacity;
+    stadion.latitude = latitude;
+    stadion.longitude = longitude;
+
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+    
+});
+
+app.MapPost("/api/stadions/{team}/{city}/{name}/{capacity}/{latitude}/{longitude}/{nick}/{token}",
+            async (int team, string? city, string? name, int capacity, float latitude, 
+            float longitude, string nick, string? token, FoottyContext db) => 
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+
+    var club = await db.Team.FindAsync(team);
+    if  (club is null) {
+        return Results.Unauthorized();
+    }
+
+    footty.Models.Stadium stadium = new footty.Models.Stadium{
+        team = club,
+        city = city+" ",
+        name = name,
+        capacity = capacity,
+        latitude = latitude,
+        longitude = longitude
+    };
+    db.Stadium.Add(stadium);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/api/stadions/{city}/{nick}/{token}", stadium);
+});
 
 
+app.MapDelete("api/stadions/{id}/{nick}/{token}", 
+                async (int id, string nick, string? token, FoottyContext db) => 
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+
+    if (await db.Stadium.FindAsync(id) is footty.Models.Stadium stadium)
+    {
+        db.Stadium.Remove(stadium);
+        await db.SaveChangesAsync();
+        return Results.Ok(stadium);
+    }
+
+    return Results.NotFound();
+
+});
 
 app.Run();
