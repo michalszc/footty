@@ -15,7 +15,9 @@
             <input type="hidden" asp-for="id" />
             <div class="form-group">
                 <label asp-for="team" class="control-label"></label>
-                <input asp-for="team" class="form-control" />
+                <select asp-for="team" class="form-control" asp-items="ViewBag.teams">
+                    <option value="-1">-- Choose team --</option>
+                </select>
                 <span asp-validation-for="team" class="text-danger"></span>
             </div>
             <div class="form-group">

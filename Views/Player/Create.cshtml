@@ -14,12 +14,20 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="team" class="control-label"></label>
-                <input asp-for="team" class="form-control" />
+                <select asp-for="team" class="form-control" asp-items="ViewBag.teams">
+                    <option value="-1">-- Choose team --</option>
+                </select>
                 <span asp-validation-for="team" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="position" class="control-label"></label>
-                <input asp-for="position" class="form-control" />
+                <select asp-for="position" class="form-control">
+                    <option value="-1">-- Choose position --</option>
+                    <option value="Midfielder">Midfielder</option>
+                    <option value="Defender">Defender</option>
+                    <option value="Forward">Forward</option>
+                    <option value="Goalkeeper">Goalkeeper</option>
+                </select>
                 <span asp-validation-for="position" class="text-danger"></span>
             </div>
             <div class="form-group">

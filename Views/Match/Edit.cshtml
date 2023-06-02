@@ -15,22 +15,31 @@
             <input type="hidden" asp-for="id" />
             <div class="form-group">
                 <label asp-for="date" class="control-label"></label>
-                <input asp-for="date" class="form-control" />
+                <input asp-for="date" class="form-control"  type="date" />
                 <span asp-validation-for="date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="team" class="control-label"></label>
-                <input asp-for="team" class="form-control" />
+                <select asp-for="team" class="form-control" asp-items="ViewBag.teams">
+                    <option value="-1">-- Choose team --</option>
+                </select>
                 <span asp-validation-for="team" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="opponent" class="control-label"></label>
-                <input asp-for="opponent" class="form-control" />
+                <select asp-for="opponent" class="form-control" asp-items="ViewBag.teams">
+                    <option value="-1">-- Choose team --</option>
+                </select>
                 <span asp-validation-for="opponent" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="place" class="control-label"></label>
-                <input asp-for="place" class="form-control" />
+                <label>
+                    <input type="radio" name="location" value="Home" checked asp-for="place"/> Home
+                </label>
+                <label>
+                    <input type="radio" name="location" value="Away" asp-for="place" /> Away
+                </label>
                 <span asp-validation-for="place" class="text-danger"></span>
             </div>
             <div class="form-group">
