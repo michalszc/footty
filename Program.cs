@@ -44,7 +44,7 @@ app.Use(async (ctx, next) =>
     bool canEdit = string.Equals(ctx.Session.GetString("canEdit"), "True");
     string path = ctx.Request.Path.ToString();
 
-    if (!isLogged && path != "/User/Login" && path != "/User/Logout")
+    if (!isLogged && path != "/User/Login" && path != "/User/Logout" && !path.Split("/").Contains("api"))
     {
         ctx.Response.Redirect("/User/Login");
         return;
@@ -60,5 +60,52 @@ app.Use(async (ctx, next) =>
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// api 
+app.MapGet("/api/matches/{id}/{nick}/{token}", async (int id, string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    return Results.Ok(await db.Match
+                        .Include(m => m.team)
+                        .Include(m => m.opponent)
+                        .Where(m => m.id == id)
+                        .ToListAsync());
+    
+});
+
+app.MapGet("/api/teams/{id}/{nick}/{token}", async (int id, string nick, string? token, FoottyContext db) =>
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    return Results.Ok(await db.Team
+                        .Where(m => m.id == id)
+                        .ToListAsync());
+    
+});
+
+
+app.MapPost("/api/teams/{name}/{nick}/{token}", async (string name, string nick, string? token, FoottyContext db) => 
+{
+    bool access = db.User.Where(p => p.username == nick).Select(p => p.can_edit).First();
+    string? key = db.User.Where(p => p.username == nick).Select(p => p.token).First();
+    access = (token == key) && access;
+    if (!access) {
+        return Results.Unauthorized();
+    }
+    footty.Models.Team team = new footty.Models.Team{name = name};
+    db.Team.Add(team);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/api/teams/{team.id}/{nick}/{token}", team);
+});
 
 app.Run();
