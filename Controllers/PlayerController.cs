@@ -190,8 +190,24 @@ namespace footty.Controllers
         }
 
         // GET: Player/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View();
         }
 
@@ -200,11 +216,28 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,team,position,shirt_number,minutes_played,games_played,goals_scored")] Player player)
+        public async Task<IActionResult> Create([Bind("id,team,position,shirt_number,minutes_played,games_played,goals_scored")] Player player, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(player);
+                String teamid = form["team"]!;
+                Team? team = null;
+                if (teamid != "-1") {
+                    team = _context.Team.Where(t => t.id == int.Parse(teamid)).First();
+                } else {
+                    team = _context.Team.First();
+                }
+                string? position = form["position"]! != "-1" ? form["position"] : "Goalkeeper";
+                _context.Add(new Player { 
+                    id = player.id,
+                    team = team,
+                    position = position!, 
+                    shirt_number = player.shirt_number, 
+                    minutes_played = player.minutes_played, 
+                    games_played = player.games_played, 
+                    assists = player.assists, 
+                    goals_scored = player.goals_scored
+                });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -224,6 +257,22 @@ namespace footty.Controllers
             {
                 return NotFound();
             }
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View(player);
         }
 
@@ -232,7 +281,7 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,team,position,shirt_number,minutes_played,games_played,goals_scored")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("id,team,position,shirt_number,minutes_played,games_played,goals_scored")] Player player, IFormCollection form)
         {
             if (id != player.id)
             {
@@ -243,7 +292,23 @@ namespace footty.Controllers
             {
                 try
                 {
-                    _context.Update(player);
+                    string? position = form["position"]! != "-1" ? form["position"] : "Goalkeeper";
+                    String teamid = form["team"]!;
+                    Team? team = null;
+                    if (teamid != "-1") {
+                        team = _context.Team.Where(t => t.id == int.Parse(teamid)).First();
+                    }
+                    Player p = _context.Player.Where(s => s.id == id)
+                        .Include(p => p.team)
+                        .First();
+                    p.id = player.id;
+                    p.team = team;
+                    p.position = position!; 
+                    p.shirt_number = player.shirt_number; 
+                    p.minutes_played = player.minutes_played;
+                    p.games_played = player.games_played;
+                    p.assists = player.assists;
+                    p.goals_scored = player.goals_scored;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

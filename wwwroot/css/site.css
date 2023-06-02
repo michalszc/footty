@@ -51,3 +51,7 @@ header {
   background: #F5F5F5;
   justify-content: center;
 }
+
+footer {
+  z-index: -1;
+}

@@ -34,19 +34,22 @@ namespace footty.Controllers
             var toDate = DateTime.Today;
             if(HttpContext.Session.Keys.Contains("from")) {
                 var from = HttpContext.Session.GetString("from"); 
-                fromDate = DateTime.Parse(from!);
+                if (from!.Length > 0) { 
+                    fromDate = DateTime.Parse(from!);
+                }
                 ViewData["from"] = from;
             } 
             if(HttpContext.Session.Keys.Contains("to")) {
                 var to = HttpContext.Session.GetString("to");
-                fromDate = DateTime.Parse(to!);
+                if (to!.Length > 0) {
+                    toDate = DateTime.Parse(to!);
+                }
                 ViewData["to"] = to;
             } 
             
             
             var good = list.Where(p => 
-                                    p.place == "Home"
-                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
+                                    DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
                                     && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) <= toDate);
             
             if (HttpContext.Session.Keys.Contains("team")) {
@@ -92,8 +95,7 @@ namespace footty.Controllers
             HttpContext.Session.SetString("to", to);
             HttpContext.Session.SetString("team", team);
             var good = list.Where(p => 
-                                    p.place == "Home"
-                                    && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
+                                    DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) >= fromDate 
                                     && DateTime.Parse(p.date!, new CultureInfo("pl-PL", true)) <= toDate);
 
             if (team != "" && team != "Select team") {
@@ -124,8 +126,24 @@ namespace footty.Controllers
         }
 
         // GET: Match/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View();
         }
 
@@ -134,11 +152,35 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,date,team,opponent,place,team_goals,opponent_goals")] Match match)
+        public async Task<IActionResult> Create([Bind("id,date,team,opponent,place,team_goals,opponent_goals")] Match match, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(match);
+                String teamid = form["team"]!;
+                Team? team = null;
+                if (teamid != "-1") {
+                    team = _context.Team.Where(t => t.id == int.Parse(teamid)).First();
+                } else {
+                    team = _context.Team.First();
+                }
+                String opponentid = form["opponent"]!;
+                Team? opponent = null;
+                if (opponentid != "-1") {
+                    opponent = _context.Team.Where(t => t.id == int.Parse(opponentid)).First();
+                } else {
+                    opponent = _context.Team.First();
+                }
+                DateTime parsedDate;
+                DateTime.TryParseExact(match.date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate);
+                _context.Add(new Match { 
+                    id = match.id,
+                    date = parsedDate.ToString("dd/MM/yyyy").Replace(".", "/"),
+                    team = team,
+                    opponent = opponent,
+                    place = form["location"],
+                    team_goals = match.team_goals,
+                    opponent_goals = match.opponent_goals
+                });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -158,6 +200,22 @@ namespace footty.Controllers
             {
                 return NotFound();
             }
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View(match);
         }
 
@@ -166,7 +224,7 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,date,team,opponent,place,team_goals,opponent_goals")] Match match)
+        public async Task<IActionResult> Edit(int id, [Bind("id,date,team,opponent,place,team_goals,opponent_goals")] Match match, IFormCollection form)
         {
             if (id != match.id)
             {
@@ -177,7 +235,27 @@ namespace footty.Controllers
             {
                 try
                 {
-                    _context.Update(match);
+                    Match m = _context.Match.Where(m => m.id == id)
+                        .Include(m => m.team)
+                        .Include(m => m.opponent)
+                        .First();
+                    String teamid = form["team"]!;
+                    if (teamid != "-1") {
+                        m.team = _context.Team.Where(t => t.id == int.Parse(teamid)).First();
+                    }
+                    String opponentid = form["opponent"]!;
+                    if (opponentid != "-1") {
+                        m.opponent = _context.Team.Where(t => t.id == int.Parse(opponentid)).First();
+                    }
+                    if (match.date != null) {
+                        DateTime parsedDate;
+                        if (DateTime.TryParseExact(match.date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)) {
+                            m.date = parsedDate.ToString("dd/MM/yyyy").Replace(".", "/");
+                        }
+                    }
+                    m.place = form["location"];
+                    m.team_goals = match.team_goals;
+                    m.opponent_goals = match.opponent_goals;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

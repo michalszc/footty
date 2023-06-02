@@ -114,8 +114,24 @@ namespace footty.Controllers
         }
 
         // GET: Stadium/Create
-        public IActionResult Create()
-        {
+        public async Task<IActionResult> Create()
+        {   
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View();
         }
 
@@ -124,11 +140,26 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,team,city,name,capacity,latitude,longitude")] Stadium stadium)
+        public async Task<IActionResult> Create([Bind("id,city,name,capacity,latitude,longitude")] Stadium stadium, IFormCollection form)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(stadium);
+                String favTeamId = form["team"]!;
+                Team? team = null;
+                if (favTeamId != "-1") {
+                    team = _context.Team.Where(t => t.id == int.Parse(favTeamId)).First();
+                } else {
+                    team = _context.Team.First();
+                }
+                _context.Add(new Stadium { 
+                    id = stadium.id,
+                    team = team,
+                    city = stadium.city,
+                    name = stadium.name,
+                    capacity = stadium.capacity,
+                    latitude = stadium.latitude,
+                    longitude = stadium.longitude
+                });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -148,6 +179,22 @@ namespace footty.Controllers
             {
                 return NotFound();
             }
+            var teams = await _context.Team.ToListAsync();
+            var selectListItems = new List<SelectListItem>();
+
+            if (teams != null)
+            {
+                foreach (var team in teams)
+                {
+                    selectListItems.Add(new SelectListItem
+                    {
+                        Value = team.id.ToString(),
+                        Text = team.name
+                    });
+                }
+            }
+
+            ViewBag.teams = selectListItems;
             return View(stadium);
         }
 
@@ -156,7 +203,7 @@ namespace footty.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?Linkid=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,team,city,name,capacity,latitude,longitude")] Stadium stadium)
+        public async Task<IActionResult> Edit(int id, [Bind("id,team,city,name,capacity,latitude,longitude")] Stadium stadium, IFormCollection form)
         {
             if (id != stadium.id)
             {
@@ -167,7 +214,20 @@ namespace footty.Controllers
             {
                 try
                 {
-                    _context.Update(stadium);
+                    String teamid = form["team"]!;
+                    Team? team = null;
+                    if (teamid != "-1") {
+                        team = _context.Team.Where(t => t.id == int.Parse(teamid)).First();
+                    }
+                    Stadium s = _context.Stadium.Where(s => s.id == id)
+                        .Include(u => u.team)
+                        .First();
+                    s.team = team;
+                    s.capacity = stadium.capacity;
+                    s.city = stadium.city;
+                    s.name = stadium.name;
+                    s.latitude = stadium.latitude;
+                    s.longitude = stadium.longitude;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
