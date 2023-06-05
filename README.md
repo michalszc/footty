@@ -19,3 +19,6 @@ Table with information about stadiums. Can be filtered by capacity and city. Aft
 
 ## Users
 If user has admin privilages he can access tables with other users, where he can add new users, and edit old ones.
+
+## Testing REST API
+File restAPITest.cs contains functions written to test functionalities of the REST API.
